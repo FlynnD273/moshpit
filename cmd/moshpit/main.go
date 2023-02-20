@@ -16,9 +16,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/CrushedPixel/moshpit"
 	"github.com/c-bata/go-prompt"
 	"github.com/k0kubun/go-ansi"
-	"github.com/makeworld-the-better-one/moshpit"
+
+	// "github.com/makeworld-the-better-one/moshpit"
 	"github.com/mitchellh/colorstring"
 	uuid "github.com/satori/go.uuid"
 )
@@ -70,6 +72,16 @@ func main() {
 			fmt.Printf("Error parsing log file path: %s\n", err.Error())
 			os.Exit(1)
 		}
+
+		f, err := os.Create(ffmpegLogPath)
+
+		if err != nil {
+			fmt.Printf("Error creating log file: %s\n", err.Error())
+			os.Exit(1)
+		} else {
+			fmt.Printf("Created log file at: %s\n", f.Name())
+		}
+		defer f.Close()
 	}
 
 	promptLoop(ctx, inputFile, *ffmpegPathFlag, ffmpegLogPath)
@@ -235,7 +247,7 @@ func cmdScenes(ctx context.Context, ffmpegPath string, ffmpegLogPath string, fil
 			fmt.Println()
 
 			// rewrite progress bar
-			bar.RenderBlank()
+			bar.writeRendered()
 		case progress := <-progressChan:
 			bar.SetProgress(progress)
 		}
@@ -304,7 +316,7 @@ func cmdMosh(ctx context.Context, ffmpegPath string, ffmpegLogPath string, file 
 		return err
 	}
 
-	fmt.Printf(colorstring.Color("Moshing took [green]%s[reset].\n"), time.Since(startTime).Round(time.Second))
+	ansi.Printf(colorstring.Color("Moshing took [green]%s[reset].\n"), time.Since(startTime).Round(time.Second))
 	return nil
 }
 
@@ -372,21 +384,21 @@ func moshAvi(ctx context.Context, aviFileName string, moshFrames []uint64) (stri
 	// following command line output is written in the next line
 	defer fmt.Println("")
 
-	bar := newDefaultFloatProgressBar("[cyan][2/3][reset] Moshing AVI file...")
-	bar.RenderBlank()
+	ansi.Println(colorstring.Color("[cyan][2/3][reset] Moshing AVI file..."))
+	// bar.RenderBlank()
 	for {
 		select {
 		case err, ok := <-errorChan:
 			if !ok {
 				// processing has finished
-				bar.Clear()
+				// bar.Clear()
 				ansi.Print(colorstring.Color("[cyan][2/3][reset] Moshed AVI file."))
 				return moshedFileName, nil
 			}
 			os.Remove(moshedFileName)
 			return "", fmt.Errorf("error moshing AVI file: %s", err.Error())
 		case _ = <-processedChan:
-			bar.SetProgress(0.5) // TODO: proper progress
+			// bar.SetProgress(0.5) // TODO: proper progress
 		}
 	}
 }
