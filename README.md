@@ -7,7 +7,7 @@ Comes with built-in scene cut detection for optimal results.
 
 This is a modified version of the original moshpit tool. Changes so far:
 - A log file for ffmpeg is now created if one doesn't exist. Previously, it would simply throw an exception and quit if the file did not already exist. 
-- Moshpit no longer throws an exception when using an input file that doesn't contain an audio stream. 
+- Moshpit no longer throws an exception when using an input file that doesn't contain an audio stream. asdfklh
 
 ![tutorial](https://i.imgur.com/XGrR2Kv.gif)
 ![original](https://i.imgur.com/nWUzNkC.gif)
