@@ -20,7 +20,7 @@ This is a modified version of the original moshpit tool. Changes so far:
 - [Building from source](#building-from-source)
 
 ## Installation
-Aside from the *moshpit* binary, which can be downloaded from the [releases page](https://github.com/CrushedPixel/moshpit/releases),
+Aside from the *moshpit* binary, which can be downloaded from the [releases page](https://github.com/FlynnD273/moshpit/releases),
 you need a copy of [*FFmpeg*](https://www.ffmpeg.org/) installed on your machine.  
 
 ## Usage
